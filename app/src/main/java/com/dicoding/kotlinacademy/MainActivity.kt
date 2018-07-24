@@ -3,8 +3,8 @@ package com.dicoding.kotlinacademy
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.intentFor
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         club_list.layoutManager = LinearLayoutManager(this)
         club_list.adapter = RecyclerViewAdapter(this, items) {
-            val toast = Toast.makeText(applicationContext, it.name, Toast.LENGTH_SHORT)
-            toast.show()
+            startActivity(intentFor<DetailActivity>("name" to it.name,
+                    "image" to it.image, "desc" to it.desc))
         }
     }
 

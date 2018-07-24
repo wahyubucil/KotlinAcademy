@@ -18,9 +18,14 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         DetailActivityUI().setContentView(this)
 
-        Glide.with(this).load(R.drawable.img_acm).into(clubImageView)
-        clubNameTextView.text = "Arsenal FC"
-        clubDescTextView.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        val intent = intent
+        val clubName = intent.getStringExtra("name")
+        val clubImage = intent.getIntExtra("image", 0)
+        val clubDesc = intent.getStringExtra("desc")
+
+        Glide.with(this).load(clubImage).into(clubImageView)
+        clubNameTextView.text = clubName
+        clubDescTextView.text = clubDesc
     }
 
     inner class DetailActivityUI : AnkoComponent<DetailActivity> {
