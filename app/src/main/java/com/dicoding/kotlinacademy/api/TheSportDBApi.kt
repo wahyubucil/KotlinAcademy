@@ -1,9 +1,10 @@
-package com.dicoding.kotlinacademy
+package com.dicoding.kotlinacademy.api
 
 import android.net.Uri
+import com.dicoding.kotlinacademy.BuildConfig
 
 object TheSportDBApi {
-    fun getTeams(league: String): String {
+    fun getTeams(league: String?): String {
         return Uri.parse(BuildConfig.BASE_URL).buildUpon()
                 .appendPath("api")
                 .appendPath("v1")

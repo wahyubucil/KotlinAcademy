@@ -1,4 +1,4 @@
-package com.dicoding.kotlinacademy
+package com.dicoding.kotlinacademy.api
 
 import java.net.URL
 

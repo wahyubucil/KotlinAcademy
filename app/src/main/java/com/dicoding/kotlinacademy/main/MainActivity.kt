@@ -1,4 +1,4 @@
-package com.dicoding.kotlinacademy
+package com.dicoding.kotlinacademy.main
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout

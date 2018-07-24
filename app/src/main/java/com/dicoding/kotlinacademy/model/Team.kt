@@ -1,4 +1,4 @@
-package com.dicoding.kotlinacademy
+package com.dicoding.kotlinacademy.model
 
 import com.google.gson.annotations.SerializedName
 
