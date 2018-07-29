@@ -1,4 +1,4 @@
-package com.dicoding.kotlinacademy.main
+package com.dicoding.kotlinacademy.teams
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -11,7 +11,7 @@ import com.dicoding.kotlinacademy.model.Team
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 
-class MainAdapter(private val teams: List<Team>) : RecyclerView.Adapter<TeamViewHolder>() {
+class TeamsAdapter(private val teams: List<Team>) : RecyclerView.Adapter<TeamViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamViewHolder {
         return TeamViewHolder(TeamUI().createView(AnkoContext.create(parent.context, parent)))
