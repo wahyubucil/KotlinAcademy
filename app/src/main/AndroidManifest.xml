@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.dicoding.kotlinacademy.main.MainActivity" />
-        <activity android:name=".home.HomeActivity" />
     </application>
 
 </manifest>
