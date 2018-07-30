@@ -1,24 +1,32 @@
 package com.dicoding.kotlinacademy.detail
 
+import android.database.sqlite.SQLiteConstraintException
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.dicoding.kotlinacademy.R
 import com.dicoding.kotlinacademy.R.color.colorAccent
 import com.dicoding.kotlinacademy.R.color.colorPrimaryText
 import com.dicoding.kotlinacademy.api.ApiRepository
+import com.dicoding.kotlinacademy.db.Favorite
+import com.dicoding.kotlinacademy.db.database
 import com.dicoding.kotlinacademy.model.Team
 import com.dicoding.kotlinacademy.util.invisible
 import com.dicoding.kotlinacademy.util.visible
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -35,6 +43,8 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
     private lateinit var teamStadium: TextView
     private lateinit var teamDescription: TextView
 
+    private var menuItem: Menu? = null
+    private var isFavorite: Boolean = false
     private lateinit var id: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,6 +137,40 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
         teamDescription.text = data[0].teamDescription
         teamFormedYear.text = data[0].teamFormedYear
         teamStadium.text = data[0].teamStadium
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        menuItem = menu
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            R.id.add_to_favorite -> {
+                addToFavorite()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun addToFavorite() {
+        try {
+            database.use {
+                insert(Favorite.TABLE_FAVORITE,
+                        Favorite.TEAM_ID to team.teamId,
+                        Favorite.TEAM_NAME to team.teamName,
+                        Favorite.TEAM_BADGE to team.teamBadge)
+            }
+            snackbar(swipeRefresh, "Added to favorite").show()
+        } catch (e: SQLiteConstraintException) {
+            snackbar(swipeRefresh, e.localizedMessage).show()
+        }
     }
 
 }
