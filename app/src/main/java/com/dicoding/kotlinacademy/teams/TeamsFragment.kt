@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.dicoding.kotlinacademy.R
 import com.dicoding.kotlinacademy.api.ApiRepository
+import com.dicoding.kotlinacademy.detail.TeamDetailActivity
 import com.dicoding.kotlinacademy.model.Team
 import com.dicoding.kotlinacademy.util.invisible
 import com.dicoding.kotlinacademy.util.visible
@@ -41,7 +42,9 @@ class TeamsFragment : Fragment(), AnkoComponent<Context>, TeamsView {
                 spinnerItems)
         spinner.adapter = spinnerAdapter
 
-        adapter = TeamsAdapter(teams)
+        adapter = TeamsAdapter(teams) {
+            ctx.startActivity<TeamDetailActivity>("id" to "${it.teamId}")
+        }
         listTeam.adapter = adapter
 
         val request = ApiRepository()
