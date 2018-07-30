@@ -12,10 +12,20 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.dicoding.kotlinacademy.R.color.colorAccent
 import com.dicoding.kotlinacademy.R.color.colorPrimaryText
+import com.dicoding.kotlinacademy.api.ApiRepository
+import com.dicoding.kotlinacademy.model.Team
+import com.dicoding.kotlinacademy.util.invisible
+import com.dicoding.kotlinacademy.util.visible
+import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class TeamDetailActivity : AppCompatActivity() {
+class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
+
+    private lateinit var presenter: TeamDetailPresenter
+    private lateinit var team: Team
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
@@ -25,8 +35,13 @@ class TeamDetailActivity : AppCompatActivity() {
     private lateinit var teamStadium: TextView
     private lateinit var teamDescription: TextView
 
+    private lateinit var id: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val intent = intent
+        id = intent.getStringExtra("id")
 
         supportActionBar?.title = "Team Detail"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -84,5 +99,34 @@ class TeamDetailActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val request = ApiRepository()
+        val gson = Gson()
+        presenter = TeamDetailPresenter(this, request, gson)
+        presenter.getTeamDetail(id)
+        swipeRefresh.onRefresh {
+            presenter.getTeamDetail(id)
+        }
     }
+
+    override fun showLoading() {
+        progressBar.visible()
+    }
+
+    override fun hideLoading() {
+        progressBar.invisible()
+    }
+
+    override fun showTeamDetail(data: List<Team>) {
+        team = Team(data[0].teamId,
+                data[0].teamName,
+                data[0].teamBadge)
+        swipeRefresh.isRefreshing = false
+        Picasso.get().load(data[0].teamBadge).into(teamBadge)
+        teamName.text = data[0].teamName
+        teamDescription.text = data[0].teamDescription
+        teamFormedYear.text = data[0].teamFormedYear
+        teamStadium.text = data[0].teamStadium
+    }
+
 }
